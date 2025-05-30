@@ -55,14 +55,14 @@ describe('AuthStorage', () => {
 
 	describe('saveUser', () => {
 		it('deve salvar usuário no localStorage', () => {
-			const email = 'test@example.com';
+			const user = { email: 'test@example.com' };
 			const token = 'test-token';
 
-			authStorage.saveUser(email, token);
+			authStorage.saveUser(user, token);
 
 			expect(localStorage.setItem).toHaveBeenCalledWith(
 				'auth_user',
-				JSON.stringify({ email, token })
+				JSON.stringify({ user, token })
 			);
 		});
 	});
@@ -73,10 +73,10 @@ describe('AuthStorage', () => {
 		});
 
 		it('deve retornar os dados do usuário quando existe', () => {
-			const userData = { email: 'test@example.com', token: 'test-token' };
+			const userData = { user: { email: 'test@example.com' }, token: 'test-token' };
 			localStorage.setItem('auth_user', JSON.stringify(userData));
 
-			expect(authStorage.getUser()).toEqual(userData);
+			expect(authStorage.getUser()).toEqual(userData.user);
 		});
 	});
 
@@ -86,7 +86,7 @@ describe('AuthStorage', () => {
 		});
 
 		it('deve retornar true quando há usuário logado', () => {
-			const userData = { email: 'test@example.com', token: 'test-token' };
+			const userData = { user: { email: 'test@example.com' }, token: 'test-token' };
 			localStorage.setItem('auth_user', JSON.stringify(userData));
 
 			expect(authStorage.isLoggedIn()).toBe(true);
@@ -95,7 +95,7 @@ describe('AuthStorage', () => {
 
 	describe('logout', () => {
 		it('deve remover usuário do localStorage', () => {
-			const userData = { email: 'test@example.com', token: 'test-token' };
+			const userData = { user: { email: 'test@example.com' }, token: 'test-token' };
 			localStorage.setItem('auth_user', JSON.stringify(userData));
 
 			authStorage.logout();
@@ -112,7 +112,7 @@ describe('AuthStorage', () => {
 
 		it('deve retornar o email do usuário logado', () => {
 			const email = 'test@example.com';
-			const userData = { email, token: 'test-token' };
+			const userData = { user: { email }, token: 'test-token' };
 			localStorage.setItem('auth_user', JSON.stringify(userData));
 
 			expect(authStorage.getEmail()).toBe(email);
